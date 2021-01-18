@@ -1,6 +1,5 @@
 package org.blendee.cli;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -236,8 +235,8 @@ public class Command {
 		}
 
 		@Override
-		protected File getOutputRoot() {
-			return params.output.toFile();
+		protected Path getOutputRoot() {
+			return params.output;
 		}
 
 		private Path toPath(TablePath path) {
