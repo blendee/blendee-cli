@@ -2,7 +2,7 @@
 <project name="blendee.plugin" default="import">
 
 	<property name="blendee.src" value="../../blendee/src" />
-	<property name="blendee.codegensrc" value="../../blendee/codegensrc" />
+	<property name="blendee.tools-src" value="../../blendee/tools-src" />
 
 	<path id="develop.classpath">
 		<pathelement location="build" />
@@ -16,7 +16,7 @@
 		<antcall target="compile" />
 		<copy todir="build">
 			<fileset dir="${blendee.src}" includes="**/*.java" />
-			<fileset dir="${blendee.codegensrc}" includes="**/*.java" />
+			<fileset dir="${blendee.tools-src}" includes="**/*.java" />
 		</copy>
 		<jar basedir="build" jarfile="../blendee.jar" />
 	</target>
@@ -31,7 +31,7 @@
 			<exclude name="**/package-info.java" />
 			<compilerarg value="-Xlint:unchecked" />
 		</javac>
-		<javac srcdir="${blendee.codegensrc}" destdir="build" debug="true" optimize="true" deprecation="true" release="8" encoding="UTF-8" includeantruntime="false">
+		<javac srcdir="${blendee.tools-src}" destdir="build" debug="true" optimize="true" deprecation="true" release="8" encoding="UTF-8" includeantruntime="false">
 			<include name="**/*.java" />
 			<exclude name="**/package-info.java" />
 			<compilerarg value="-Xlint:unchecked" />
