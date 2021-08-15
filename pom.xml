@@ -5,7 +5,7 @@
 
 	<groupId>org.blendee</groupId>
 	<artifactId>blendee-cli</artifactId>
-	<version>0.9.0</version>
+	<version>0.9.1</version>
 	<packaging>jar</packaging>
 
 	<name>blendee-cli</name>
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>org.blendee</groupId>
 			<artifactId>blendee-tools</artifactId>
-			<version>0.9.0</version>
+			<version>0.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-cli</groupId>
