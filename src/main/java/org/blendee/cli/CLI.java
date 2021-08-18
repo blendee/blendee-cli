@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
@@ -26,7 +24,7 @@ public class CLI {
 	}
 
 	private static void execute(String[] args) throws Exception {
-		Options options = new Options();
+		var options = new Options();
 
 		options.addOption(helpOption);
 
@@ -107,17 +105,17 @@ public class CLI {
 				.desc("option (-Dproperty=value)")
 				.build());
 
-		CommandLineParser parser = new DefaultParser();
+		var parser = new DefaultParser();
 
 		try {
 			if (help(args)) {
-				HelpFormatter formatter = new HelpFormatter();
+				var formatter = new HelpFormatter();
 				formatter.setOptionComparator(null);
 				formatter.printHelp("blendee-cli", options, true);
 				return;
 			}
 
-			CommandLine commandLine = parser.parse(options, args);
+			var commandLine = parser.parse(options, args);
 
 			Path output;
 			if (commandLine.hasOption("o")) {
@@ -128,10 +126,10 @@ public class CLI {
 
 			output = output.toAbsolutePath();
 
-			Params params = new Params();
+			var params = new Params();
 
 			if (commandLine.hasOption("c")) {
-				Path path = Paths.get(commandLine.getOptionValue("c"));
+				var path = Paths.get(commandLine.getOptionValue("c"));
 
 				if (!Files.exists(path)) {
 					System.err.println("Certification File " + path + " not found.");
@@ -139,7 +137,7 @@ public class CLI {
 					return;
 				}
 
-				Properties props = new Properties();
+				var props = new Properties();
 
 				props.load(new InputStreamReader(Files.newInputStream(path)));
 
@@ -184,7 +182,7 @@ public class CLI {
 	}
 
 	private static boolean help(String[] args) throws ParseException {
-		Options options = new Options();
+		var options = new Options();
 		options.addOption(helpOption);
 		return new DefaultParser().parse(options, args, true).hasOption(helpOption.getOpt());
 	}

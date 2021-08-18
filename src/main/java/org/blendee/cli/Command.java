@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -49,7 +47,7 @@ public class Command {
 
 	public void execute()
 		throws Exception {
-		Map<OptionKey<?>, Object> init = new HashMap<>();
+		var init = new HashMap<OptionKey<?>, Object>();
 
 		init.put(BlendeeConstants.TABLE_FACADE_PACKAGE, params.packageName);
 		init.put(BlendeeConstants.SCHEMA_NAMES, params.schemaNames);
@@ -59,13 +57,13 @@ public class Command {
 		init.put(BlendeeConstants.JDBC_PASSWORD, params.password);
 
 		{
-			String className = params.options.getProperty(BlendeeConstants.TRANSACTION_FACTORY_CLASS.getKey());
+			var className = params.options.getProperty(BlendeeConstants.TRANSACTION_FACTORY_CLASS.getKey());
 			if (presents(className))
 				init.put(BlendeeConstants.TRANSACTION_FACTORY_CLASS, Class.forName(className));
 		}
 
 		{
-			String className = params.options.getProperty(BlendeeConstants.METADATA_FACTORY_CLASS.getKey());
+			var className = params.options.getProperty(BlendeeConstants.METADATA_FACTORY_CLASS.getKey());
 			if (presents(className))
 				init.put(BlendeeConstants.METADATA_FACTORY_CLASS, Class.forName(className));
 		}
@@ -73,7 +71,7 @@ public class Command {
 		init.put(BlendeeConstants.USE_METADATA_CACHE, true);
 
 		Class<?> tableFacadeSuperclass;
-		String tableFacadeSuperclassName = params.options.getProperty(TABLE_FACADE_SUPERCLASS);
+		var tableFacadeSuperclassName = params.options.getProperty(TABLE_FACADE_SUPERCLASS);
 		if (presents(tableFacadeSuperclassName)) {
 			tableFacadeSuperclass = Class.forName(tableFacadeSuperclassName);//名称だけなので通常のload
 		} else {
@@ -81,7 +79,7 @@ public class Command {
 		}
 
 		Class<?> rowSuperclass;
-		String rowSuperclassName = params.options.getProperty(ROW_SUPERCLASS);
+		var rowSuperclassName = params.options.getProperty(ROW_SUPERCLASS);
 		if (presents(rowSuperclassName)) {
 			rowSuperclass = Class.forName(rowSuperclassName);//名称だけなので通常のload
 		} else {
@@ -89,7 +87,7 @@ public class Command {
 		}
 
 		CodeFormatter codeFormatter;
-		String codeFormatterClassName = params.options.getProperty(CODE_FORMATTER_CLASS);
+		var codeFormatterClassName = params.options.getProperty(CODE_FORMATTER_CLASS);
 		if (presents(codeFormatterClassName)) {
 			codeFormatter = (CodeFormatter) Class.forName(codeFormatterClassName).getDeclaredConstructor().newInstance();
 		} else {
@@ -97,7 +95,7 @@ public class Command {
 		}
 
 		boolean useNumberClass;
-		String useNumberClassString = params.options.getProperty(USE_NUMBER_CLASS);
+		var useNumberClassString = params.options.getProperty(USE_NUMBER_CLASS);
 		if (presents(useNumberClassString)) {
 			useNumberClass = Boolean.parseBoolean(useNumberClassString);
 		} else {
@@ -105,14 +103,14 @@ public class Command {
 		}
 
 		boolean notUseNullGuard;
-		String notUseNullGuardString = params.options.getProperty(NOT_USE_NULL_GUARD);
+		var notUseNullGuardString = params.options.getProperty(NOT_USE_NULL_GUARD);
 		if (presents(notUseNullGuardString)) {
 			notUseNullGuard = Boolean.parseBoolean(notUseNullGuardString);
 		} else {
 			notUseNullGuard = false;
 		}
 
-		String driverClass = params.options.getProperty(JDBC_DRIVER_CLASS);
+		var driverClass = params.options.getProperty(JDBC_DRIVER_CLASS);
 		if (presents(driverClass)) {
 			init.put(BlendeeConstants.JDBC_DRIVER_CLASS_NAME, driverClass);
 		}
@@ -144,10 +142,10 @@ public class Command {
 			}
 		});
 
-		CommandTableFacadeGeneratorHandler handler = new CommandTableFacadeGeneratorHandler();
+		var handler = new CommandTableFacadeGeneratorHandler();
 
 		Blendee.execute(t -> {
-			TableFacadeGenerator generator = new TableFacadeGenerator(
+			var generator = new TableFacadeGenerator(
 				BlendeeManager.get().getMetadata(),
 				params.packageName,
 				tableFacadeSuperclass,
@@ -218,7 +216,7 @@ public class Command {
 
 		@Override
 		protected void writeSource(String source) {
-			byte[] contents = source.getBytes(charset);
+			var contents = source.getBytes(charset);
 			try {
 				Files.write(currentPath, contents);
 			} catch (IOException e) {
@@ -257,7 +255,7 @@ public class Command {
 	}
 
 	private Stream<Path> schemaPathStream() {
-		Path packagePath = packagePath();
+		var packagePath = packagePath();
 		return Arrays.stream(params.schemaNames).map(s -> packagePath.resolve(TableFacadePackageRule.care(s)));
 	}
 
@@ -266,7 +264,7 @@ public class Command {
 			return Arrays.stream(params.tables).map(TablePath::parse);
 		}
 
-		Set<TablePath> tables = new LinkedHashSet<>();
+		var tables = new LinkedHashSet<TablePath>();
 		Arrays.stream(params.schemaNames).flatMap(s -> loadAllTables(s)).forEach(tables::add);
 
 		if (params.regenerate) {
